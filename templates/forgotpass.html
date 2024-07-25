@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forgot Password</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles(forgotpass).css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-container">
+        <h1>Forgot Password</h1>
+        <p>Please enter your Phone Number to reset your password.</p>
+        <form action="#" method="post">
+          <label for="email">Phone Number</label>
+          <input type="number" id="email" name="email" required />
+          <br />
+          <br />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

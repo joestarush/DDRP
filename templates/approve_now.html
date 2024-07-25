@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donators/Donation Details</title>
+    <link rel="stylesheet" href="{% static 'styles(dnv).css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Donators/Donation Details</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Distance</th>
+            <th>Expiry Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in requirements %}
+          <tr>
+            <td>{{i.id}}</td>
+            {% if i.category == 'rf' %}
+            <td>Raw Vegetables/ Fruits</td>
+            {% endif %}
+
+            {% if i.category == 'rs' %}
+            <td>Raw Solids</td>
+            {% endif %}
+
+            {% if i.category == 'wa' %}
+            <td>Water</td>
+            {% endif %}
+
+            {% if i.category == 'da' %}
+            <td>Dairy</td>
+            {% endif %}
+
+            {% if i.category == 'cl' %}
+            <td>Clothes</td>
+            {% endif %}
+
+            {% if i.category == 'me' %}
+            <td>Medicines</td>
+            {% endif %}
+
+            {% if i.category == 'sh' %}
+            <td>Shelter Items</td>
+            {% endif %}
+
+            <td>{{i.item}}</td>
+            <td>{{i.quantity}}</td>
+            <td>{{i.location}}</td>
+            <td> </td>
+            <td>{{i.needed_date}}</td>
+            {% if i.status == 'pn' %}
+            <td>Pending</td>
+            {% endif %} 
+
+            {% if i.status == 'ac' %}
+            <td>Accepted</td>
+            {% endif %} 
+
+            {% if i.status == 're' %}
+            <td>Received</td>
+            {% endif %} 
+
+            {% if i.status == 'ge' %}
+            <td>Generated</td>
+            {% endif %} 
+
+            {% if i.status == 'se' %}
+            <td>Sent</td>
+            {% endif %} 
+          
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="buttons">
+          <button class="confirm-btn" value = 'confirm' name = 'confirm'>Confirm</button>
+          <button class="back-btn" value = 'back' name = 'back'>Back</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

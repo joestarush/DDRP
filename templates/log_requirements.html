@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donate Now</title>
+    <link rel="stylesheet" href="{% static 'styles(dn).css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="icon-container">
+        <img
+          src="static/dashboard/typing.png"
+          alt="Enter Details"
+          class="animated-icon"
+        />
+      </div>
+      <h1>Donate Now</h1>
+      <h2>Enter Donation Details</h2>
+      <form id="donation-form" method="POST">
+        {% csrf_token %}
+        <label for="donator-id">Donation ID</label>
+        <input type="text" id="donator-id" name="donator-id" />
+
+        <label for="donator-name">Admin Name</label>
+        <input
+          type="text"
+          id="donator-name"
+          name="donator-name"
+          value="{{user.first_name}}"
+        />
+
+        <label for="admin-id">Admin ID</label>
+        <input
+          type="text"
+          id="admin-id"
+          name="admin-id"
+          value="{{user.phone_number}}"
+        />
+
+        <div class="button-container">
+          <button
+            type="button"
+            class="btn btn-edit"
+            name="log_camera"
+            id="log_camera"
+            onclick="window.location.href='{% url 'log_camera' %}'"
+          >
+            Log from QR
+          </button>
+          <button type="submit" class="btn btn-submit">Submit</button>
+          <button type="button" class="btn btn-edit">
+            <i class="fas fa-pen"></i> Edit
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

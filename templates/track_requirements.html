@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donators/Donation Details</title>
+    <link rel="stylesheet" href="{% static 'styles(dnv).css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Donators/Donation Details</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Category</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Completed On</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in requirements %}
+          <tr>
+            <td>{{i.id}}</td>
+            <td>{{user.first_name}} {{user.last_name}}</td>
+            <td>{{user.phone_number}}</td>
+            <td>{{i.category}}</td>
+            <td>{{i.item}}</td>
+            <td>{{i.quantity}}</td>
+            <td>{{i.location}}</td>
+            <td>{{i.satisfied_date}}</td>
+            <td>{{i.status}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="buttons">
+          <button class="back-btn" value="back" name="back">Back</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

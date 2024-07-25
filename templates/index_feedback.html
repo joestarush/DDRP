@@ -1,0 +1,18 @@
+{% load static %} {% if user.user_type == 'vc' or user.user_type == 'us' or not user.is_authenticated %}
+<h1><b>Feedback</b></h1>
+<div class="wrapper">
+  <i id="left" class="fa-solid fas fa-angle-left"></i>
+  <ul class="carousel">
+    {% for i in feedback %}
+    <li class="card">
+      <div class="img">
+        <img src="{{ i.image.url }}" alt="{{ i.name }}" draggable="false" />
+      </div>
+      <h2 style="color: green; font-weight: bold">{{ i.name }}</h2>
+      <span>"{{ i.message }}"</span>
+    </li>
+    {% endfor %}
+  </ul>
+  <i id="right" class="fa-solid fas fa-angle-right"></i>
+</div>
+{% endif %}

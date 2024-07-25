@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles(signin).css' %}" />
+  </head>
+  <body>
+    <form method="post">
+      {% csrf_token %}
+      <h2>Login at DDRP</h2>
+      <p>See your Growth and get Support</p>
+      <div class="container">
+        <label for="uname"><b>Enter your Phone Number/ Email</b></label>
+        <input
+          type="text"
+          placeholder="Enter your phone number"
+          name="uname"
+          required
+        />
+
+        <label for="psw"><b>Password</b></label>
+        <input
+          type="password"
+          placeholder="Enter Password"
+          name="psw"
+          required
+        />
+
+        <button type="submit">Login</button>
+        <label>
+          <input type="checkbox" checked="checked" name="remember" /> Remember
+          me
+        </label>
+      </div>
+
+      <div class="container">
+        <button type="button" class="cancelbtn">Cancel</button>
+        <span class="psw"
+          >Forgot <a href="{% url 'forgot_password' %}">password?</a></span
+        >
+      </div>
+    </form>
+
+    <div class="imgcontainer">
+      <img src="static/dashboard/login.png" alt="Avatar" class="avatar" />
+    </div>
+  </body>
+</html>

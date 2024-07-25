@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Camera Capture Page</title>
+    <style>
+      /* Basic styling for the camera capture page */
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+      video {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      canvas {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Capture a Photo</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="capture">Capture Photo</button>
+
+    <form id="photoForm" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="photoData" id="photoData" />
+      <!-- Add any other form fields here if necessary -->
+    </form>
+    <canvas id="canvas" width="640" height="480"></canvas>
+
+    <script>
+      // Get the necessary elements
+      const video = document.getElementById("video");
+      const canvas = document.getElementById("canvas");
+      const captureButton = document.getElementById("capture");
+      const photoDataInput = document.getElementById("photoData");
+      const photoForm = document.getElementById("photoForm");
+      const context = canvas.getContext("2d");
+
+      // Access the device camera and stream to the video element
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          video.srcObject = stream;
+          video.play();
+        })
+        .catch((err) => {
+          console.error("Error accessing the camera: ", err);
+        });
+
+      // Capture the photo when the button is clicked
+      captureButton.addEventListener("click", () => {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const photoDataURL = canvas.toDataURL("image/png");
+        photoDataInput.value = photoDataURL;
+
+        // Submit the form
+        photoForm.submit();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donators/Donation Details</title>
+    <link rel="stylesheet" href="{% static 'styles(dnv).css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Donators/Donation Details</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Category</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Distance</th>
+            <th>Needed Date</th>
+            <th>Status</th>
+            <th>Admin Id</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in requirements %}
+          <tr>
+            <td>{{i.id}}</td>
+            <td>{{user.first_name}} {{user.last_name}}</td>
+            <td>{{user.phone_number}}</td>
+            
+            {% if i.category == 'rf' %}
+            <td>Raw Vegetables/ Fruits</td>
+            {% endif %}
+
+            {% if i.category == 'rs' %}
+            <td>Raw Solids</td>
+            {% endif %}
+
+            {% if i.category == 'wa' %}
+            <td>Water</td>
+            {% endif %}
+
+            {% if i.category == 'da' %}
+            <td>Dairy</td>
+            {% endif %}
+
+            {% if i.category == 'cl' %}
+            <td>Clothes</td>
+            {% endif %}
+
+            {% if i.category == 'me' %}
+            <td>Medicines</td>
+            {% endif %}
+
+            {% if i.category == 'sh' %}
+            <td>Shelter Items</td>
+            {% endif %}
+
+            <td>{{i.item}}</td>
+            <td>{{i.quantity}}</td>
+            <td>{{i.location}}</td>
+            <td> </td>
+            <td>{{i.needed_date}}</td>
+            {% if i.status == 'pn' %}
+            <td>Pending</td>
+            {% endif %} 
+            <td>{{i.admin_id}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p>
+        <i
+          >The table above shows the product you are doanting if there is any
+          chnages you can go back and edit and if there are none that you can
+          proceed further by selecting the slot in which you will able to
+          handover the product to the preffered location below
+        </i>
+      </p>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="book-slot">
+          <h2>Book Slot</h2>
+          <div class="slot-container">
+            <div class="slot-item">
+              <label for="date">Select Date:</label>
+              <input type="date" id="date" />
+            </div>
+            <div class="slot-item">
+              <label for="time">Select Time:</label>
+              <select id="time">
+                <option value="9am">9:00 AM</option>
+                <option value="10am">10:00 AM</option>
+                <option value="11am">11:00 AM</option>
+                <option value="12pm">12:00 PM</option>
+                <option value="1pm">1:00 PM</option>
+                <option value="2pm">2:00 PM</option>
+                <option value="3pm">3:00 PM</option>
+                <option value="4pm">4:00 PM</option>
+                <option value="5pm">5:00 PM</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button class="confirm-btn" value = 'confirm' name = 'confirm'>Confirm</button>
+          <button class="back-btn" value = 'back' name = 'back'>Back</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

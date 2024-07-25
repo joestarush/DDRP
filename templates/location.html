@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        display: flex;
+        height: 100vh;
+      }
+
+      #map {
+        flex: 1;
+        height: 100%;
+      }
+
+      .sidebar {
+        width: 300px;
+        padding: 10px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+        overflow-y: auto;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+    </style>
+    <title>Map with Routing</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <form id="search-form" class="form-group" method="POST">
+          <input
+            type="text"
+            id="search-text"
+            placeholder="Search for a location"
+          />
+          <button type="submit">Search</button>
+        </form>
+
+        <form method="post" id="location-form" style="display: none">
+          {% csrf_token %}
+          <input type="hidden" name="latitude" id="latitude_field" />
+          <input type="hidden" name="longitude" id="longitude_field" />
+        </form>
+        <div id="routing-info">
+          <h2>Routing Information</h2>
+          <!-- Routing information will be displayed here -->
+        </div>
+      </div>
+      <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        var map = L.map("map").setView([20.5937, 78.9629], 5); // Set initial view to India
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+
+        var routingControl;
+        let marker1, marker2;
+        let searchMarkers = [];
+
+        function setEndMarker(lat, lng) {
+          if (marker2) {
+            marker2.remove();
+          }
+          marker2 = L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup("End")
+            .openPopup();
+          calculateRoute();
+        }
+
+        function calculateRoute() {
+          if (marker1 && marker2) {
+            if (routingControl) {
+              routingControl.remove();
+            }
+
+            routingControl = L.Routing.control({
+              waypoints: [
+                L.latLng(marker1.getLatLng()),
+                L.latLng(marker2.getLatLng()),
+              ],
+              router: L.Routing.osrmv1({
+                language: "en",
+                profile: "car",
+              }),
+              createMarker: function () {
+                return null;
+              },
+              show: false,
+            }).addTo(map);
+
+            // Zoom the map to fit the start and end markers
+            const bounds = L.latLngBounds([
+              marker1.getLatLng(),
+              marker2.getLatLng(),
+            ]);
+            map.fitBounds(bounds);
+
+            // Update routing information
+            routingControl.on("routesfound", function (e) {
+              var routes = e.routes;
+              var summary = routes[0].summary;
+              document.getElementById("routing-info").innerHTML = `
+                            <h2>Routing Information</h2>
+                            <p><strong>Distance:</strong> ${(
+                              summary.totalDistance / 1000
+                            ).toFixed(2)} km</p>
+                            <p><strong>Time:</strong> ${Math.floor(
+                              summary.totalTime / 3600
+                            )}h ${Math.floor(
+                (summary.totalTime % 3600) / 60
+              )}m</p>
+                        `;
+            });
+          }
+        }
+
+        function clearSearchMarkers() {
+          searchMarkers.forEach((marker) => marker.remove());
+          searchMarkers = [];
+        }
+
+        // Get current location and set as start marker
+        function onSuccess(position) {
+          var lat = position.coords.latitude;
+          var lon = position.coords.longitude;
+
+          // Update the map view to the user's location
+
+          map.setView([lat, lon], 13);
+
+          // Add a marker at the user's location
+          marker1 = L.marker([lat, lon])
+            .addTo(map)
+            .bindPopup("Start")
+            .openPopup();
+
+          document.getElementById("latitude_field").value = lat;
+          document.getElementById("longitude_field").value = lng;
+
+          // Submit the form (consider adding a confirmation step)
+          document.getElementById("location-form").submit();
+        }
+
+        function onError(error) {
+          console.error("Error getting location: ", error);
+          alert("Unable to retrieve your location.");
+        }
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+
+        map.on("click", function (e) {
+          setEndMarker(e.latlng.lat, e.latlng.lng);
+        });
+
+        window.setEndMarker = setEndMarker;
+
+        // Handle form submission
+        document
+          .getElementById("search-form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            var searchText = document.getElementById("search-text").value;
+            fetch("/search", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: "search_text=" + encodeURIComponent(searchText),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.error) {
+                  alert(data.error);
+                } else {
+                  clearSearchMarkers();
+                  let bounds = new L.LatLngBounds();
+                  data.forEach((place) => {
+                    const lat = place.geometry.location.lat;
+                    const lng = place.geometry.location.lng;
+                    const shortDescription = place.description.split(",")[0];
+                    const marker = L.marker([lat, lng])
+                      .addTo(map)
+                      .bindTooltip(shortDescription)
+                      .openTooltip();
+                    marker.on("click", function () {
+                      setEndMarker(lat, lng);
+                    });
+                    searchMarkers.push(marker);
+                    bounds.extend([lat, lng]);
+                  });
+                  if (searchMarkers.length > 0) {
+                    map.fitBounds(bounds);
+                  }
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
+      });
+    </script>
+  </body>
+</html>

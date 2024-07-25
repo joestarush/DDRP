@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Digital Disaster Resource Planner</title>
+    <link rel="icon" href="logo.jpg" type="image/jpg" />
+    <link rel="stylesheet" href="{% static 'styles(db2).css' %}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+      async
+      defer
+    ></script>
+    <script src="{% static 'script.js' %}"></script>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="logo-container">
+        <img src="{% static 'index/logo/logo.jpg' %}" alt="Logo" class="logo" />
+        <span class="ddrp">DDRP</span>
+      </div>
+      <div class="hamburger-menu" id="hamburger-menu">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      {% if user.is_authenticated == False %}
+      <div class="nav-links" id="nav-links">
+        <a href="{% url 'signin' %}">Sign In</a>
+        <div class="dropdown">
+          <button class="create-account-btn">Create Account</button>
+          <div class="dropdown-content">
+            <a href="{% url 'victim_signup' %}">Victim</a>
+            <a href="{% url 'user_signup' %}">Donator</a>
+          </div>
+        </div>
+      </div>
+      {% endif %} {% if user.is_authenticated == True %}
+      <div class="nav-links" id="nav-links">
+        <a href="{% url 'signout' %}">Signout</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="dropdown-nav" id="dropdown-nav">
+      <a href="#">Dashboard</a>
+      <a href="#">Requirement</a>
+      <a href="#">Profile</a>
+    </div>
+    
+    {% include 'header.html' %} 
+    {% include 'charts.html' %}
+    {% include 'requirements_table.html' %}
+
+    {% include 'index_disaster_info.html' %}
+    <section class="charts">
+      <div class="chart">
+        <canvas id="pieChart"></canvas>
+      </div>
+      <div class="chart">
+        <canvas id="lineChart"></canvas>
+      </div>
+      <div class="chart">
+        <canvas id="barChart"></canvas>
+      </div>
+    </section>
+    
+
+    <!--update disaster form-->
+    <p><b>Update Emergency Disaster</b> - <p><i>Fill the form mentioned below to report any disaster or emergency you encounter as early as possible so that the ddrp team can quickly reach to help the victim with basic living necessities. </i></p></p>
+    <div class="container">
+      <h1>Emergency / Disaster Update</h1>
+      <form>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname" name="fullname" required />
+          </div>
+          <div class="form-group">
+            <label for="mobile">Mobile Number</label>
+            <input type="tel" id="mobile" name="mobile" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="disaster-location">Disaster Location</label>
+            <input
+              type="text"
+              id="disaster-location"
+              name="disaster-location"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="current-location">Current Location on Map</label>
+            <img src="{% static '/index/info/image.png' %}" alt="map" width="350" height="325">
+          
+            <input
+              type="hidden"
+              id="current-location"
+              name="current-location"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="disaster-type">Disaster Type</label>
+            <select id="disaster-type" name="disaster-type" required>
+              <option value="earthquake">Earthquake</option>
+              <option value="flood">Flood</option>
+              <option value="hurricane">Hurricane</option>
+              <option value="wildfire">Wildfire</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="upload-picture">Upload Picture</label>
+            <input
+              type="file"
+              id="upload-picture"
+              name="upload-picture"
+              accept="image/*"
+            />
+          </div>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <!-- CODE FOR TIPS IN DISASTER STARTS-->
+    <br />
+    <br />
+    <br />
+    <br />
+    {% include 'tips_disaster.html' %}
+    {% include 'index_feedback.html' %}
+    
+    <footer>
+      <div class="footer-container">
+        <div class="footer-top">
+          <a href="#top" class="back-to-top">Back to top</a>
+        </div>
+        <div class="footer-links">
+          <div class="footer-column">
+            <h3>Get to Know Us</h3>
+            <hr />
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Vision and Idea</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Connect with Us</h3>
+            <hr />
+            <ul>
+              <li><a href="#">linkedin</a></li>
+              <li><a href="#">Instagram</a></li>
+              <li><a href="#">Facebook</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Be our Partner</h3>
+            <hr />
+            <ul>
+              <li><a href="{% url 'admin_signup' %}">Admin</a></li>
+              <li><a href="{% url 'user_signup' %}">Donator</a></li>
+              <li><a href="{% url 'victim_signup' %}">Victim</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Let Us Help You</h3>
+            <hr />
+            <ul>
+              <li><a href="#">Your Account</a></li>
+
+              <li><a href="#">Help</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="footer-countries">
+            <select name="country">
+              <option value="India">India</option>
+            </select>
+            <div id="google_translate_element"></div>
+            
+          </div>
+          <div class="footer-legal">
+            Created By- |<a href="www.linkedin.com/in/harshit-bansal-a06a70225 "
+              >Harshit Bansal</a
+            >
+            | <a href="#linkedin ">Ishan Mudgal</a> |
+            <a href="#linkedin">Tarush Saxena</a> | © 2024 DDRP. All rights
+            reserved.
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script>
+      function showDisasterTips() {
+  const disasterType = document.getElementById('disaster-type').value;
+  const tipsContainer = document.getElementById('disaster-tips');
+  const videoContainer = document.getElementById('disaster-video');
+
+  const disasterTips = {
+    earthquake: {
+      tips: `
+        <ul>
+          <li>Drop, cover, and hold on.</li>
+          <li>Stay indoors until the shaking stops.</li>
+          <li>Stay away from windows and doors.</li>
+        </ul>
+      `,
+      video: "https://www.youtube.com/embed/N4j8OEY6Dtc"
+    },
+    flood: {
+      tips: `
+        <ul>
+          <li>Move to higher ground immediately.</li>
+          <li>Avoid walking or driving through flood waters.</li>
+          <li>Stay informed through local news updates.</li>
+        </ul>
+      `,
+      video: "https://www.youtube.com/embed/wIopfCvLBAA"
+    },
+    fire: {
+      tips: `
+        <ul>
+          <li>Stop, drop, and roll if your clothes catch fire.</li>
+          <li>Stay low to the ground to avoid smoke.</li>
+          <li>Exit the building immediately and call 911.</li>
+        </ul>
+      `,
+      video: "https://www.youtube.com/embed/RjQOHfA-eNE"
+    },
+    hurricane: {
+      tips: `
+        <ul>
+          <li>Secure your home and outdoor objects.</li>
+          <li>Evacuate if instructed by authorities.</li>
+          <li>Stay indoors and away from windows.</li>
+        </ul>
+      `,
+      video: "https://www.youtube.com/embed/N8yts1qCw4Y"
+    }
+  };
+
+  if (disasterType && disasterTips[disasterType]) {
+    tipsContainer.innerHTML = disasterTips[disasterType].tips;
+    videoContainer.innerHTML = `<iframe width="560" height="315" src="${disasterTips[disasterType].video}" frameborder="0" allowfullscreen></iframe>`;
+  } else {
+    tipsContainer.innerHTML = '';
+    videoContainer.innerHTML = '';
+  }
+}
+
+      </script>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+          { pageLanguage: "en" },
+          "google_translate_element"
+        );
+      }
+    </script>
+    <script
+      type="text/javascript"
+      src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+    ></script>
+
+  </body>
+</html>

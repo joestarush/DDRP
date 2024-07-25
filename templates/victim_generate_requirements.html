@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DDRP Form</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="{% static 'index/logo/logo.jpg' %}"
+    />
+    <link rel="stylesheet" href="{% static 'styles(reqadmf).css' %}" />
+    <script>
+      function toggleNav() {
+        const nav = document.getElementById("vertical-nav");
+        if (nav.style.display === "block") {
+          nav.style.display = "none";
+        } else {
+          nav.style.display = "block";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="navbar-left">
+        <span class="menu-icon" onclick="toggleNav()">&#9776;</span>
+        <img src="{% static 'index/logo/logo.jpg' %}" alt="Logo" />
+        <span>DDRP</span>
+      </div>
+      <div class="navbar-right">
+        <span>User Template</span>
+      </div>
+    </div>
+
+    <div id="vertical-nav" class="vertical-nav">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="#requirement">View Requirements</a>
+      <a href="#profile">Profile</a>
+    </div>
+    <h2>Fill in the Requirements</h2>
+
+    <div class="form-container">
+      <form method = 'POST'>
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="serial-number">Serial Number</label>
+          <input
+            type="text"
+            id="serial-number"
+            value="{{id}}"
+            readonly
+            name="serial-number"
+            style="width: 35%"
+          />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category">
+              <option value="Choose category">Choose Category</option>
+              <option value="rf">RAW VEGETABLES/ RAW FRUITS</option>
+              <option value="rs">RAW SOLIDS</option>
+              <option value="wa">WATER</option>
+              <option value="da">DAIRY</option>
+              <option value="cl">CLOTHES</option>
+              <option value="me">MEDICINES</option>
+              <option value="sh">SHELTER ITEMS</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="item">Item</label>
+            <input type="text" id="item" name="item" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" name="quantity" required />
+          </div>
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" value="{{loc}}" readonly
+             id="location" name="location"  required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="location">Needed Date</label>
+            <input type="date" id="needed_date" name="needed_date">
+          </div>
+        </div>
+        
+        
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>

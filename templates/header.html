@@ -1,0 +1,97 @@
+{% load static %}
+<header class="header">
+  <div class="slider">
+    <img
+      src="{% static 'index/header/header.jpg' %}"
+      class="slide"
+      alt="Header Image 1"
+    />
+    <img
+      src="{% static 'index/header/header.jpg' %}"
+      class="slide"
+      alt="Header Image 2"
+    />
+    <img
+      src="{% static 'index/header/header.jpg' %}"
+      class="slide"
+      alt="Header Image 3"
+    />
+  </div>
+
+  <div class="header-text">
+    <h1>Welcome to DDRP</h1>
+    <p>Your contributions make a difference.</p>
+  </div>
+</header>
+<section class="summary-boxes">
+  <div class="summary-box">
+    <h2>Total Requirements</h2>
+    <p>{{ total_requirement }} Items</p>
+  </div>
+  <div class="summary-box">
+    <h2>Total Donated</h2>
+    <p>{{ total_donated }} Items</p>
+  </div>
+</section>
+<p>The <b>Digital Disaster Resource Planner (DDRP)</b> is a comprehensive platform designed to revolutionize disaster management through crowd-sourced efforts and efficient resource allocation. Its primary objective is to streamline disaster response by harnessing the collective power of communities and organizations.
+
+  DDRP utilizes digital technologies to gather real-time data on disaster situations, such as the availability of food and other essential resources. By crowdsourcing information from various sources including government agencies, NGOs, and local communities, DDRP ensures a centralized and up-to-date repository of critical resources.
+  
+  One of DDRP's key functionalities is its ability to manage food stocks effectively. By monitoring inventory levels across different locations and updating in real-time, DDRP helps prevent food wastage and ensures that resources are distributed equitably to where they are most needed during disasters.
+  
+  Moreover, DDRP serves as a coordination hub, facilitating communication and collaboration among stakeholders involved in disaster response efforts. Through its user-friendly interface and data visualization tools, DDRP enables quick decision-making and strategic planning, ultimately enhancing the efficiency and effectiveness of disaster relief operations.
+  
+  In essence, DDRP represents a pivotal advancement in disaster management, leveraging digital innovation to empower communities, optimize resource utilization, and mitigate the impact of disasters on vulnerable populations. By promoting transparency and accountability in resource management, DDRP aims to foster resilience and aid in rebuilding communities affected by disasters worldwide.</p>
+
+{% if user.is_authenticated == True and user.user_type == 'ad' %}
+<h1>Requirements</h1>
+<section class="summary-boxes">  
+  <div class="summary-box">
+    <h2><a href="{% url 'view_requirements' %}">View</a></h2>
+  </div>
+  <div class="summary-box">
+    <h2><a href="{% url 'generate_requirements_admin' %}">Generate</a></a></h2>
+  </div>
+  <div class="summary-box">
+    <h2><a href="{% url 'send' %}">Send</a></h2>
+  </div>
+  <div class="summary-box">
+    <h2><a href="{% url 'log_requirements' %}">Log</a></h2>
+  </div>
+</section>
+{% endif %} 
+
+{% if user.is_authenticated == True and user.user_type == 'vc'%}
+<h1>Requirements</h1>
+<section class="summary-boxes">  
+  <div class="summary-box">
+    <h2><a href="{% url 'view_requirements' %}">View</a></h2>
+  </div>
+  <div class="summary-box">
+    <h2><a href="{% url 'victim_generate' %}">Generate</a></a></h2>
+  </div>
+  <div class="summary-box">
+    <h2><a href="{% url 'track_requirements_victim' %}">Track</a></a></h2>
+  </div>
+  <div class="summary-box">
+    <h2><a href="#">Emergency/ Disaster Update</a></a></h2>
+  </div>
+</section>
+{% endif %}
+
+
+{% if user.is_authenticated == True and user.user_type == 'us'%}
+<h1>Requirements</h1>
+<section class="summary-boxes">  
+  <div class="summary-box">
+    <h2><a href="{% url 'view_requirements' %}">View</a></h2>
+  </div>
+  <div class="summary-box">
+    <h2><a href="{% url 'track_requirements' %}">Track</a></a></h2>
+  </div>
+  <div class="summary-box">
+    <h2><a href="#">Emergency/ Disaster Update</a></a></h2>
+  </div>
+</section>
+{% endif %}
+

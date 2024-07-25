@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Map with Location</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"
+    />
+    <style>
+      #map {
+        height: 80vh;
+      }
+      #location-form {
+        display: block; /* Show the form initially */
+        position: absolute; /* Position the form absolutely for centering */
+        bottom: 20px; /* Place the form at the bottom */
+        left: 50%; /* Center the form horizontally */
+        transform: translateX(-50%); /* Center the form along X-axis */
+        background-color: #f0f0f0; /* Light background color */
+        padding: 10px 20px; /* Add some padding */
+        border-radius: 5px; /* Rounded corners */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      }
+
+      #location-form button {
+        background-color: #3f51b5; /* Blue button color */
+        color: #fff; /* White text color */
+        border: none; /* Remove border */
+        padding: 10px 20px; /* Add padding */
+        font-size: 16px; /* Increase font size */
+        cursor: pointer; /* Indicate clickable element */
+        border-radius: 5px; /* Rounded corners */
+        transition: background-color 0.2s ease-in-out; /* Smooth hover effect */
+      }
+
+      #location-form button:hover {
+        background-color: #303f9f; /* Darken button on hover */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <form method="POST" id="location-form">
+      {% csrf_token %}
+      <input type="hidden" name="latitude" id="latitude_field" />
+      <input type="hidden" name="longitude" id="longitude_field" />
+      <button type="submit">Submit Location</button>
+    </form>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        var map = L.map("map").setView([20.5937, 78.9629], 5); // Set initial view to India
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+
+        function onSuccess(position) {
+          var lat = position.coords.latitude;
+          var lon = position.coords.longitude;
+
+          map.setView([lat, lon], 13);
+
+          var marker = L.marker([lat, lon])
+            .addTo(map)
+            .bindPopup("Your Location")
+            .openPopup();
+
+          document.getElementById("latitude_field").value = lat;
+          document.getElementById("longitude_field").value = lon;
+
+          document.getElementById("location-form").style.display =
+            "block".submit();
+        }
+
+        function onError(error) {
+          console.error("Error getting location: ", error);
+          alert("Unable to retrieve your location.");
+        }
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{% load static %} 
+{% if user.is_authenticated == False %}
+<section class="info-sections">
+  {% for i in index_info %}
+  <div class="info-section">
+    <img src="{{STATIC_URL}}{{i.image}}" alt="Disaster Info" />
+    <div class="info-text">
+      <h2>{{i.title}}</h2>
+      <p>{{i.description}}</p>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+{% endif %}

@@ -1,0 +1,26 @@
+{% load static %}
+{% if user.is_authenticated == False %}
+<section class="tips-section">
+    <div class="heading-box">
+      <h2>Tips to Follow in Emergency Situation</h2>
+    </div>
+    <br />
+    <label for="disaster-type">Select Disaster Type:</label>
+    <select
+      id="disaster-type"
+      name="disaster-type"
+      onchange="showDisasterTips()"
+    >
+      <option value="">Select a disaster</option>
+      <option value="earthquake">Earthquake</option>
+      <option value="flood">Flood</option>
+      <option value="fire">Fire</option>
+      <option value="hurricane">Hurricane</option>
+    </select>
+    <div class="tips-container">
+      <div id="disaster-tips" class="disaster-tips"></div>
+      <div id="disaster-video" class="disaster-video"></div>
+    </div>
+  </section>
+{% endif %}
+  

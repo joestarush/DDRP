@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OTP Verification</title>
+    {% load static %}
+    <link rel="stylesheet" href='{% static "style(otp).css" %}' />
+  </head>
+  <body>
+    <div class="container">
+      <div class="otp-box">
+        <img
+          src="{% static 'otp/verificationicon.png' %}"
+          alt="Verification Icon"
+          class="verification-icon"
+        />
+        <h2>OTP Verification</h2>
+        <p>
+          One Time Password (OTP) has been sent to {{phone_number}} and
+          {{email}}.
+        </p>
+        <p>Enter the OTP below to verify it.</p>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="otp-input-group">
+            <input
+              type="tel"
+              maxlength="1"
+              class="otp-input"
+              name="digit1"
+              required
+            />
+            <input
+              type="tel"
+              maxlength="1"
+              class="otp-input"
+              name="digit2"
+              required
+            />
+            <input
+              type="tel"
+              maxlength="1"
+              class="otp-input"
+              name="digit3"
+              required
+            />
+            <input
+              type="tel"
+              maxlength="1"
+              class="otp-input"
+              name="digit4"
+              required
+            />
+            <input
+              type="tel"
+              maxlength="1"
+              class="otp-input"
+              name="digit5"
+              required
+            />
+            <input
+              type="tel"
+              maxlength="1"
+              class="otp-input"
+              name="digit6"
+              required
+            />
+          </div>
+          <div class="resend-container">
+            <a href="#" class="resend-otp">Resend OTP</a>
+            <span id="timer">03:00</span>
+          </div>
+          <button type="submit">Verify OTP</button>
+        </form>
+      </div>
+    </div>
+    <script src="{% static 'timer.js' %}"></script>
+    <script src="{% static 'otpinput.js' %}"></script>
+  </body>
+</html>

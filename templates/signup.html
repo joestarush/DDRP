@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles(sup).css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <form class="signup-form" method="POST">
+        {% csrf_token %}
+        <h2>Sign Up</h2>
+        <div class="form-group">
+          <label for="name">First Name</label>
+          <input type="text" id="name" name="first_name" required />
+          <label for="name">Last Name</label>
+          <input type="text" id="name" name="last_name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="phone-number">Phone Number</label>
+          <input type="tel" id="phone-number" name="phone_number" required />
+        </div>
+        <div class="form-group captcha-group">
+          <label for="Password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+
+        <div class="form-group captcha-group">
+          <img
+            src="{% static 'captcha/captcha-image.jpg' %}"
+            alt="CAPTCHA"
+            class="captcha-image"
+          />
+          <input type="text" id="captcha" name="captcha" required />
+        </div>
+        <button type="submit">Sign Up</button>
+        {% for message in messages %}
+        <label for="error_text">{{message}}</label>
+        {% endfor %}
+      </form>
+    </div>
+  </body>
+</html>

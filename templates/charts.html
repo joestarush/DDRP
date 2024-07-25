@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 20px;
+      }
+      .chart-container {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+      .chart-box {
+        width: calc(33.33% - 20px);
+        margin-bottom: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+      }
+      .chart-box:hover {
+        transform: translateY(-5px);
+      }
+      .chart-title {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        background-color: #f0f0f0;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+      }
+      canvas {
+        padding: 10px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chart-container">
+      <div class="chart-box">
+        <div class="chart-title">Category Based Donation</div>
+        <canvas id="pieChart1" width="400" height="300"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Month Wise Donations</div>
+        <canvas id="pieChart2" width="550" height="550"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Weekday Wise Donation</div>
+        <canvas id="pieChart3" width="550" height="550"></canvas>
+      </div>
+    </div>
+
+    <script>
+      // Sample data (replace with your actual data)
+      const data1 = {{ data|safe }};
+      const data2 = {{ data2|safe }};
+      const data3 = {{ data3|safe }};
+
+      // Pie Chart 1
+      const ctx1 = document.getElementById('pieChart1').getContext('2d');
+      const myChart1 = new Chart(ctx1, {
+        type: 'pie',
+        data: {
+          labels: [
+            "RAW VEGETABLES/ RAW FRUITS",
+            "RAW SOLIDS",
+            "WATER",
+            "DAIRY",
+            "CLOTHES",
+            "MEDICINES",
+            "SHELTER ITEMS",
+          ],
+          datasets: [{
+            label: 'No of items required',
+            data: data1,
+            backgroundColor: [
+              "#ff6384",
+              "#36a2eb",
+              "#cc65fe",
+              "#f7dc6f",
+              "#90ee90",
+              "#ff9f43",
+              "#536dfe",
+            ],
+          }]
+        },
+        options: {
+          responsive: true,
+        }
+      });
+
+      // Line Chart
+      const ctx2 = document.getElementById('pieChart2').getContext('2d');
+      const myChart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'No of items required',
+            data: data3,
+            backgroundColor: "#36a2eb",
+            borderColor: "#36a2eb",
+            fill: false,
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+              }
+            }]
+          }
+        }
+      });
+
+      // Bar Chart
+      const ctx3 = document.getElementById('pieChart3').getContext('2d');
+      const myChart3 = new Chart(ctx3, {
+        type: 'bar',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'No of items required',
+            data: data2,
+            backgroundColor: [
+              "#cc65fe",
+              "#f7dc6f",
+              "#90ee90",
+              "#ff9f43",
+              "#536dfe",
+              "#ff6384",
+              "#ff6384",
+            ],
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+              }
+            }]
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

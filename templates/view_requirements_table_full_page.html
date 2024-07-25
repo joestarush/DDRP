@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Requirement Page</title>
+    <link rel="stylesheet" href="{% static 'styles(viewsfp).css' %}" />
+  </head>
+  <body>
+    <main>
+      <div class="top-section">
+        <div class="left">Requirements</div>
+      </div>
+      <div class="filters">
+        <div class="left">
+          <input type="text" placeholder="Search" />
+        </div>
+        <div class="right">
+          <input type="date" />
+          <select>
+            <option value="">Select Item</option>
+            <!-- Add more options as needed -->
+          </select>
+          <select>
+            <option value="">Select Category</option>
+            <!-- Add more options as needed -->
+          </select>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Status</th>
+            {% if user.is_authenticated == True %}
+            <th>Donate Now</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in requirement_items %}
+          <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.category}}</td>
+            <td>{{i.item}}</td>
+            <td>{{i.quantity}}</td>
+            <td>{{i.location}}</td>
+            <td>{{i.status}}</td>
+            {% if user.is_authenticated == True %}
+            <td>Click Here</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>

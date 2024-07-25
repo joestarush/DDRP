@@ -1,0 +1,294 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Requirement Page</title>
+    <link rel="stylesheet" href="{% static 'styles(reqadm).css' %}" />
+  </head>
+  <body>
+    <main>
+      <div class="top-section">
+        <div class="left">Requirements</div>
+      </div>
+      <div class="filters">
+        <div class="left">
+          <input type="text" placeholder="Search" />
+        </div>
+        <div class="right">
+          <input type="date" />
+          <select>
+            <option value="">Select Item</option>
+            <!-- Add more options as needed -->
+          </select>
+          <select>
+            <option value="">Select Category</option>
+            <!-- Add more options as needed -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Table for admin to view -->
+      {% if user.is_authenticated and user.user_type == 'ad' %}
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Distance</th>
+            <th>Status</th>
+            <th>Approve Now</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in requirement_items %}
+          <tr>
+            {% if i.category == 'rf' %}
+            <td>Raw Vegetables/ Fruits</td>
+            {% endif %}
+
+            {% if i.category == 'rs' %}
+            <td>Raw Solids</td>
+            {% endif %}
+
+            {% if i.category == 'wa' %}
+            <td>Water</td>
+            {% endif %}
+
+            {% if i.category == 'da' %}
+            <td>Dairy</td>
+            {% endif %}
+
+            {% if i.category == 'cl' %}
+            <td>Clothes</td>
+            {% endif %}
+
+            {% if i.category == 'me' %}
+            <td>Medicines</td>
+            {% endif %}
+
+            {% if i.category == 'sh' %}
+            <td>Shelter Items</td>
+            {% endif %}
+
+            
+            <td>{{i.item}}</td>
+            <td>{{i.quantity}}</td>
+            <td>{{i.location}}</td>
+            <td> </td>
+
+            {% if i.status == 'pn' %}
+            <td>Pending</td>
+            {% endif %} 
+
+            {% if i.status == 'ac' %}
+            <td>Accepted</td>
+            {% endif %} 
+
+            {% if i.status == 're' %}
+            <td>Received</td>
+            {% endif %} 
+
+            {% if i.status == 'ge' %}
+            <td>Generated</td>
+            {% endif %} 
+
+            {% if i.status == 'se' %}
+            <td>Sent</td>
+            {% endif %} 
+          
+            {% if i.status == 'ge' %}
+            <td>
+              <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="approve_now" value="{{i.id}}">Approve Now</button>
+              </form>
+            </td>
+            {% endif %}
+            {% if i.status != 'ge' %}
+            <td> </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %} 
+
+      <!-- Table for victim to view -->
+      {% if user.is_authenticated and user.user_type == 'vc' %} 
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Distance</th>  
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in requirement_items %}
+          <tr>
+            {% if i.category == 'rf' %}
+            <td>Raw Vegetables/ Fruits</td>
+            {% endif %}
+
+            {% if i.category == 'rs' %}
+            <td>Raw Solids</td>
+            {% endif %}
+
+            {% if i.category == 'wa' %}
+            <td>Water</td>
+            {% endif %}
+
+            {% if i.category == 'da' %}
+            <td>Dairy</td>
+            {% endif %}
+
+            {% if i.category == 'cl' %}
+            <td>Clothes</td>
+            {% endif %}
+
+            {% if i.category == 'me' %}
+            <td>Medicines</td>
+            {% endif %}
+
+            {% if i.category == 'sh' %}
+            <td>Shelter Items</td>
+            {% endif %}
+
+            
+            <td>{{i.item}}</td>
+            <td>{{i.quantity}}</td>
+            <td>{{i.location}}</td>
+            <td> </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}      
+      <!-- Table for user to view -->
+      {% if user.is_authenticated and user.user_type == 'us' %} 
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Distance</th>
+            <th>Donate Now</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in requirement_items %}
+          <tr>
+            {% if i.category == 'rf' %}
+            <td>Raw Vegetables/ Fruits</td>
+            {% endif %}
+
+            {% if i.category == 'rs' %}
+            <td>Raw Solids</td>
+            {% endif %}
+
+            {% if i.category == 'wa' %}
+            <td>Water</td>
+            {% endif %}
+
+            {% if i.category == 'da' %}
+            <td>Dairy</td>
+            {% endif %}
+
+            {% if i.category == 'cl' %}
+            <td>Clothes</td>
+            {% endif %}
+
+            {% if i.category == 'me' %}
+            <td>Medicines</td>
+            {% endif %}
+
+            {% if i.category == 'sh' %}
+            <td>Shelter Items</td>
+            {% endif %}
+
+            
+            <td>{{i.item}}</td>
+            <td>{{i.quantity}}</td>
+            <td>{{i.location}}</td>
+            <td> </td>
+            {% if i.status == 'pn' %}
+            <td>
+              <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="donate_now" value="{{i.id}}">Donate Now</button>
+              </form>
+            </td>
+            {% endif %}
+            {% if i.status != 'pn' %}
+            <td> </td>
+            {% endif %}
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %} 
+      <!-- Table for non account to view -->
+      {% if user.is_authenticated == False %}
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in requirement_items %}
+          <tr>
+            {% if i.category == 'rf' %}
+            <td>Raw Vegetables/ Fruits</td>
+            {% endif %}
+
+            {% if i.category == 'rs' %}
+            <td>Raw Solids</td>
+            {% endif %}
+
+            {% if i.category == 'wa' %}
+            <td>Water</td>
+            {% endif %}
+
+            {% if i.category == 'da' %}
+            <td>Dairy</td>
+            {% endif %}
+
+            {% if i.category == 'cl' %}
+            <td>Clothes</td>
+            {% endif %}
+
+            {% if i.category == 'me' %}
+            <td>Medicines</td>
+            {% endif %}
+
+            {% if i.category == 'sh' %}
+            <td>Shelter Items</td>
+            {% endif %}
+
+            
+            <td>{{i.item}}</td>
+            <td>{{i.quantity}}</td>
+            <td>{{i.location}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>

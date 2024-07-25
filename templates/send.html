@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Send Donation</title>
+    <link rel="stylesheet" href="{% static 'styles(dn).css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="icon-container">
+        <img
+          src="static/dashboard/typing.png"
+          alt="Enter Details"
+          class="animated-icon"
+        />
+      </div>
+      <h1>Send Donation Now</h1>
+      <h2>Enter Donation Details</h2>
+      <form id="donation-form" method="POST">
+        {% csrf_token %}
+        <label for="requirement-id">Requirement ID</label>
+        <input type="text" id="requirement-id" name="requirement-id" />
+
+        <label for="donator-name">Operator Name</label>
+        <input
+          type="text"
+          id="donator-name"
+          name="donator-name"
+          value="{{name}}"
+          readonly
+        />
+
+        <label for="victim-id">Operator Phone Number</label>
+        <input
+          type="text"
+          id="victim-id"
+          name="victim-id"
+          value="{{phone_number}}"
+          readonly
+        />
+
+        <div class="button-container">
+          <button type="submit" class="btn btn-submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
